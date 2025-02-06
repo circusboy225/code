@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>batboy's favourite word</title>
+    <script>
+        async function hashInput(input) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(input);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        
+        async function checkKeyword() {
+            const userInput = document.getElementById("keyword").value.trim();
+            const correctHash = "e4ddc63f92ff1ed7efc77d57c3c92eaffbeed58c76d0aa843929e3f74f38cb53";
+            
+            if (await hashInput(userInput) === correctHash) {
+                document.getElementById("secret").innerHTML = '<a href="judclown.png" target="_blank"><img src="judclown.png" alt="Secret Image"></a>';
+                let audio = new Audio('blll.mp3');
+                audio.play();
+            } else {
+                alert("Incorrect keyword! Try again.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Enter the Secret Keyword</h2>
+    <input type="text" id="keyword" placeholder="Enter keyword...">
+    <button onclick="checkKeyword()">Confirm</button>
+    <div id="secret"></div>
+</body>
+</html>
