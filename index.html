@@ -1,35 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>batboy's favourite word</title>
-    <script>
-        async function hashInput(input) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(input);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-        
-        async function checkKeyword() {
-            const userInput = document.getElementById("keyword").value.trim();
-            const correctHash = "e4ddc63f92ff1ed7efc77d57c3c92eaffbeed58c76d0aa843929e3f74f38cb53";
-            
-            if (await hashInput(userInput) === correctHash) {
-                document.getElementById("secret").innerHTML = '<a href="judclown.png" target="_blank"><img src="judclown.png" alt="Secret Image"></a>';
-                let audio = new Audio('blll.mp3');
-                audio.play();
-            } else {
-                alert("Incorrect keyword! Try again.");
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Entry System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background-color: #000;
+      color: #fff;
+    }
+    #output {
+      width: 300px;
+      margin: 20px auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      font-size: 18px;
+      text-align: center;
+      color: #fff;
+      background-color: #333;
+    }
+    #image-container {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h2>Enter the Secret Keyword</h2>
-    <input type="text" id="keyword" placeholder="Enter keyword...">
-    <button onclick="checkKeyword()">Confirm</button>
-    <div id="secret"></div>
+
+<h2>Type the Code</h2>
+<p>Use your keyboard to begin.:</p>
+
+<div id="output"></div>
+
+<div id="image-container">
+  <img src="judclown.png" alt="Jud Clown" style="max-width: 100%; height: auto;">
+</div>
+
+<audio id="audio" src="blll.mp3"></audio>
+
+<script>
+  const correctCode = "tomatoclown";
+  let enteredCode = "";
+
+  document.addEventListener("keydown", (event) => {
+    const key = event.key.toLowerCase();
+
+    if (/^[a-z]$/.test(key)) {
+      enteredCode += key;
+
+      document.getElementById("output").innerText = enteredCode;
+
+      if (enteredCode === correctCode) {
+        document.getElementById("image-container").style.display = "block";
+        document.getElementById("audio").play();
+        document.getElementById("output").innerText = "Correct Code!";
+      } else if (enteredCode.length >= correctCode.length) {
+        enteredCode = "";
+        document.getElementById("output").innerText = "";
+        alert("Incorrect! Try Again.");
+      }
+    }
+  });
+</script>
+
 </body>
 </html>
